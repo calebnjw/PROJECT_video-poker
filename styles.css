@@ -1,0 +1,100 @@
+body {
+  font-family: sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-flow: column nowrap;
+  align-items: center;
+
+  height: 100%;
+  width: 100%;
+
+  margin: auto;
+}
+
+.title-container {
+}
+
+.title {
+  font-size: 1.5rem;
+}
+
+.game-container {
+  display: flex;
+  flex-flow: column nowrap;
+}
+
+.winning-hands {
+  background-color: gainsboro;
+  height: 100px;
+  width: 600;
+
+  margin: 5px;
+}
+
+.game-board {
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  align-items: center;
+
+  background-color: gray;
+  height: 400px;
+  width: 600px;
+
+  margin: 5px;
+}
+
+.game-info {
+  position: absolute;
+  height: inherit;
+  width: inherit;
+}
+
+.controls-container {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+
+  background-color: black;
+  color: white;
+  width: 100%;
+
+  padding: 10px;
+}
+
+.credit-score {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: darkgrey;
+
+  height: 100%;
+  width: 100px;
+
+  margin-right: 20px;
+}
+
+.bet-controls {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+
+  background-color: darkgrey;
+}
+
+.bet-button {
+  height: 30px;
+  width: 30px;
+
+  font-size: 18px;
+}
+
+.bet-display {
+  width: 50px;
+  text-align: center;
+}
