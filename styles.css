@@ -1,5 +1,22 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&family=Monoton&display=swap");
+
+/* 
+  light = #f2e8cf;
+  dark = #161a1d;
+  dark-green = #386641;
+  green = #6a994e;
+  light-green = #a7c957;
+  red = #bc4749;
+*/
+
 body {
-  font-family: sans-serif;
+  display: flex;
+  align-items: center;
+
+  font-family: "IBM Plex Sans", sans-serif;
+  background-color: #161a1d;
+  height: 100vh;
+
   margin: 0px;
 }
 
@@ -9,21 +26,33 @@ body {
   align-items: center;
   box-sizing: border-box;
 
-  height: 100vh;
-  width: 100vw;
-  max-height: 800px;
-  max-width: 800px;
+  height: 100%;
+  width: 100%;
+  max-height: 1000px;
+  max-width: 1000px;
 
   padding: 10px;
   margin: auto;
 }
 
 .title-container {
-  margin-bottom: 10px;
+  text-align: center;
+
+  color: #a7c957;
+}
+
+.subtitle {
+  font-size: 1rem;
+
+  margin-bottom: -20px;
 }
 
 .title {
-  font-size: 1.5rem;
+  text-align: center;
+  font-family: Monoton;
+  font-weight: 100;
+  font-size: 2.8rem;
+  line-height: 2.5rem;
 }
 
 .game-container {
@@ -34,17 +63,30 @@ body {
   width: 100%;
 }
 
+.winning-hands {
+  display: grid;
+
+  background-color: #386641;
+  height: 200px;
+  width: 100%;
+
+  border-radius: 15px;
+
+  margin-bottom: 10px;
+}
+
 .game-board {
   display: flex;
-  flex-flow: column nowrap;
+  flex-flow: column wrap;
   justify-content: space-between;
   align-items: center;
 
-  background-color: gray;
+  color: #f2e8cf;
+  background-color: #386641;
   height: 100%;
   width: 100%;
 
-  margin-bottom: 5px;
+  border-radius: 15px;
 }
 
 .card-display {
@@ -53,6 +95,8 @@ body {
   justify-content: center;
   align-items: center;
   align-content: center;
+
+  text-align: center;
 
   height: 100%;
   width: 100%;
@@ -65,13 +109,17 @@ body {
   align-items: center;
   box-sizing: border-box;
 
+  font-family: "IBM Plex Mono";
   font-size: 1.5rem;
 
-  background-color: white;
-  height: 150px;
-  width: 100px;
+  color: #161a1d;
+  background-color: #f2e8cf;
+  height: 120px;
+  width: 80px;
 
+  border: 2px solid #6a994e;
   border-radius: 0.5rem;
+  box-shadow: 1px 3px 2px #2e5536;
 
   margin: 5px;
   padding: 5%;
@@ -84,8 +132,8 @@ body {
   justify-content: flex-start;
   box-sizing: border-box;
 
-  background-color: black;
-  color: white;
+  background-color: #161a1d;
+  color: #f2e8cf;
   width: 100%;
 
   padding: 10px;
@@ -95,8 +143,6 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-
-  /* background-color: darkgrey; */
 
   height: 100%;
   width: 150px;
@@ -110,18 +156,30 @@ body {
   align-items: center;
   flex-grow: 3;
 
-  /* background-color: darkgrey; */
-
   margin-right: 10px;
 }
 
 .controls-container button {
-  height: 30px;
-  min-width: 30px;
+  height: 40px;
+  min-width: 40px;
 
-  font-size: 18px;
+  color: #f2e8cf;
+  background-color: #386641;
+  border: 2px solid #386641;
+  border-radius: 8px;
+
+  font-size: 1rem;
 
   padding: 0px 10px;
+}
+
+.controls-container button:hover {
+  background-color: #6a994e;
+}
+
+.controls-container button:disabled {
+  background-color: #414141;
+  border: 2px solid #386641;
 }
 
 .bet-display {
@@ -129,13 +187,38 @@ body {
   text-align: center;
 }
 
-.winning-hands {
-  background-color: gainsboro;
-  height: 200px;
-  width: 100%;
+.selected {
+  border: 2px solid white;
+  box-shadow: 0 0 10px #a7c957;
 }
 
-.selected {
-  border: 2px solid greenyellow;
-  box-shadow: 0 0 10px greenyellow;
+.controls-container .wide-button {
+  width: 100px;
+}
+
+@media only screen and (min-width: 800px) {
+  .container {
+    padding: 30px;
+  }
+
+  .game-container {
+    flex-flow: row nowrap;
+  }
+
+  .winning-hands {
+    height: 100%;
+    width: 50%;
+
+    margin-right: 15px;
+    margin-bottom: 0px;
+  }
+
+  .card {
+    height: 150px;
+    width: 100px;
+  }
+
+  .controls-container .wide-button {
+    width: 150px;
+  }
 }

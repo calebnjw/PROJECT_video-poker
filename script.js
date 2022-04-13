@@ -1,9 +1,9 @@
 // X set up game deck and board
 //// X display "draw" button on screen
-// user adjusts bet amount - / + buttons (min 1, max 5)
-//// at 1, - button is disabled, at 5, + button is disabled. 
+// X user adjusts bet amount - / + buttons (min 1, max 5)
+//// X at 1, - button is disabled, at 5, + button is disabled. 
 // X user clicks draw
-//// deduct bet amount from player credits
+//// X deduct bet amount from player credits
 // X draw 5 cards
 // X display cards on the board + "redraw" button
 //// X add event listener for each card to be selected / deselected
@@ -11,7 +11,19 @@
 // X player clicks "redraw" button
 //// X cards that were not selected are swapped out for random cards
 // calculate score of current hand
+//// 10 types of poker hands: 
+////// 1. Five of a kind    (CAN'T BE ACHIEVED, no joker in deck)
+////// 2. Straight flush    (5 same suit + 5 sequential rank)
+////// 3. Four of a kind    (4 same rank)
+////// 4. Full house        (3 same rank + 2 same rank)
+////// 5. Flush             (5 same suit)
+////// 6. Straight          (5 sequential rank)
+////// 7. Three of a kind   (3 same rank)
+////// 8. Two Pair          (2 same rank + 2 same rank)
+////// 9. One pair          (2 same rank)
+////// 10. High card        (NOT WORTH SCORING?)
 //// score is multiplied by bet amount
+////// 
 //// add win amount to player credits
 // display the type of win, or loss + "play again" button
 
@@ -27,7 +39,7 @@ let playerCredits = 100;
 // player chooses bet amount, starting at 1
 let playerBet = 1;
 // player's hand: 5 random cards
-let playerHand = [];
+const playerHand = [];
 
 // variables to keep track of things
 let keepIndex = { // object to keep track of indices of cards to be kept / swapped
@@ -36,7 +48,11 @@ let keepIndex = { // object to keep track of indices of cards to be kept / swapp
   2: false,
   3: false,
   4: false,
-}
+};
+let suitTally = { // object to keep track of number of each suit in hand
+};
+let rankTally = { // object to keep track of number of unique ranks in hand
+};
 
 // HTML page / DOM setup:
 // container to hold page elements:
@@ -46,8 +62,11 @@ pageContainer.classList.add('container');
 const titleDisplay = document.createElement('div');
 titleDisplay.classList.add('title-container');
 // title
+const subtitle = document.createElement('p');
+subtitle.innerText = "Caleb's Gambling House presents"
+subtitle.classList.add('subtitle')
 const title = document.createElement('h1');
-title.innerText = 'Video Poker Game Thing';
+title.innerText = "VIDEO POKER";
 title.classList.add('title');
 
 // container to hold main game
@@ -85,24 +104,27 @@ betMinus.disabled = true;
 const gameControls = document.createElement('div');
 gameControls.classList.add('game-controls')
 const dealButton = document.createElement('button');
+dealButton.classList.add('wide-button');
 dealButton.innerText = "Deal";
 const redrawButton = document.createElement('button');
+redrawButton.classList.add('wide-button');
 redrawButton.innerText = "Redraw";
 const restartButton = document.createElement('button');
+restartButton.classList.add('wide-button');
 restartButton.innerText = "Restart";
 
 // putting title into title container
-titleDisplay.append(title); 
+titleDisplay.append(subtitle, title);
 // putting controls into container
 betControls.append(betMinus, betDisplay, betPlus); 
 // put score and controls into container
 controlsDisplay.append(creditScore, betControls, gameControls); 
 // put game info, card display and controls into game board
-gameBoard.append(cardDisplay, controlsDisplay); 
+gameBoard.append(cardDisplay); 
 // put scoring table and game board into game display area
-gameDisplay.append(gameBoard, winningHands); 
+gameDisplay.append(winningHands, gameBoard); 
 // put title and game display area into page container
-pageContainer.append(titleDisplay, gameDisplay);
+pageContainer.append(titleDisplay, gameDisplay, controlsDisplay);
 // put page container into body
 document.body.append(pageContainer);
 
@@ -176,16 +198,6 @@ const shuffleCards = (cards) => {
   return cards;
 };
 
-const updateValues = () => {
-  creditScore.innerText = `Credits: ${playerCredits}`
-  betDisplay.innerText = `${playerBet}`
-}
-
-// function to output messages
-const output = (message) => {
-  gameInfo.innerText = message;
-};
-
 // function to draw given number of cards to given hand
 const dealCards = () => {
   for (let i = 0; i < 5; i += 1) {
@@ -193,16 +205,40 @@ const dealCards = () => {
   }
 }
 
-
-const betModify = (direction) => {
-  if (direction === "up") {
-    playerBet += 1;
-    betDisplay.innerText = playerBet;
-  } 
-  if (direction === "down") {
-    playerBet -= 1;
-    betDisplay.innerText = playerBet;
+const redrawCards = () => {
+  for (let i = 0; i < playerHand.length; i += 1) {
+    if (keepIndex[i] === false) {
+      playerHand.splice(i, 1, deck.pop());
+    }
   }
+}
+
+
+// function to update player credit and bet amounts
+const updateValues = () => {
+  creditScore.innerText = `Credits: ${playerCredits}`
+  betDisplay.innerText = `${playerBet}`
+}
+
+// function to increase bet size
+const increaseBet = () => {
+  playerBet += 1;
+  updateValues();
+  
+  if (playerBet === 1) {
+    betMinus.disabled = true;
+  } else if (playerBet === 5) {
+    betPlus.disabled = true;
+  } else {
+    betMinus.disabled = false;
+    betPlus.disabled = false;
+  }
+}
+
+// function to decrease bet size
+const decreaseBet = () => {
+  playerBet -= 1;
+  updateValues();
   
   if (playerBet === 1) {
     betMinus.disabled = true;
@@ -227,9 +263,11 @@ const displayCards = () => {
     const botSuit = document.createElement('div');
     botSuit.innerText = `${element.symbol}`;
     cardElement.append(topSuit, midName, botSuit);
-    cardElement.addEventListener('click', () => {
-      cardToggle(index, cardElement);
-    })
+    if (gameState === STATE_DEAL) {
+      cardElement.addEventListener('click', () => {
+        cardToggle(index, cardElement);
+      })
+    }
     cardDisplay.append(cardElement);
   });
 }
@@ -238,75 +276,161 @@ const cardToggle = (i, element) => {
   if (keepIndex[i] === false) {
     keepIndex[i] = true;
     element.classList.add('selected');
-    console.log(keepIndex);
+    console.log("keep index:", keepIndex);
   } else {
     keepIndex[i] = false;
     element.classList.remove('selected');
-    console.log(keepIndex);
+    console.log("keep index:", keepIndex);
   }
 }
 
 // check for winning hands
+//// 10 types of poker hands: 
+////// X 1. Five of a kind    (CAN'T BE ACHIEVED, no joker in deck)
+////// X 2. Straight flush    (5 same suit + 5 sequential rank)
+////// X 3. Four of a kind    (4 same rank)
+////// X 4. Full house        (3 same rank + 2 same rank)
+////// X 5. Flush             (5 same suit)
+////// X 6. Straight          (5 sequential rank)
+////// 7. Three of a kind   (3 same rank)
+////// X 8. Two Pair          (2 same rank + 2 same rank)
+////// X 9. One pair          (2 same rank)
+////// 10. High card        (NOT WORTH SCORING?)
+// function to check for winning hands
 const checkWin = (hand) => {
-  // function to check for winning hands
+  // tally card ranks and suits
+  hand.forEach((element, index) => {
+    if (element.rank in rankTally) {
+      rankTally[element.rank] += 1;
+    } else {
+      rankTally[element.rank] = 1;
+    }
+    
+    if (element.suit in suitTally) {
+      suitTally[element.suit] += 1;
+    } else {
+      suitTally[element.suit] = 1;
+    }
+    
+    console.log("rank tally", rankTally);
+    console.log("suit tally", suitTally);
+  });
+
+  // first check if ranks are sequential
+  // hand[0] - hand[1] === hand[1] - hand[2] === hand[2] - hand[3], etc. 
+  //// check suits, if any = 5      (STRAIGHT FLUSH)
+  //// if not                       (STRAIGHT)
+
+  // check ranks, if any = 4,       (FOUR OF A KIND)
+
+  // check ranks, if any = 2,
+  //// check if other = 3           (FULL HOUSE)
+  //// check if other = 2           (TWO PAIR)
+  //// check if rank > 10           (ONE PAIR, JACKS OR HIGHER)
+  
+  // check suits, if any = 5        (FLUSH)
+
+  // check ranks, if any = 3        (THREE OF A KIND)
+
+  for (const [key, value] of Object.entries(object1)) {
+  console.log(`${key}: ${value}`);
+}
 }
 
 // setup game deck
 const deck = shuffleCards(makeDeck());
-// console.log(deck)
 
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 // function to run when game starts: 
 const gameStart = () => {
-  const welcomeText = document.createElement('div');
-  welcomeText.innerText = "Are you ready to play with your life? Click Deal to begin!";
+  cardDisplay.innerHTML = "Are you ready to play with your life? <br /> Click Deal to begin!";
   
   updateValues();
   
-  cardDisplay.append(welcomeText);
   gameControls.append(dealButton);
 }
 
+// function to run when player clicks deal: 
 const gameDeal = () => {
-  // on deal
   dealCards();
-  console.log(playerHand)
+  console.log("current player hand:", playerHand)
+  displayCards();
   
   playerCredits -= playerBet;
   updateValues();
-  
-  displayCards();
 
+  // swap out buttons
   gameControls.removeChild(dealButton);
   gameControls.appendChild(redrawButton);
+  // disable bet modifications
+  betMinus.disabled = true;
+  betPlus.disabled = true;
+
+  gameState = STATE_DRAW;
 }
 
 // function to run when while swapping cards:
 const gameRedraw = () => {
   // then swap draw 5 - playerKeep.length number of cards
-  for (let i = 0; i < playerHand.length; i += 1) {
-    if (keepIndex[i] === false) {
-      playerHand.splice(i, 1, deck.pop())
-    }
-  }
+  redrawCards();
+  console.log("current player hand:", playerHand)
   displayCards();
 
+
+  
+  // calculate hand and winnings, then update values
+  checkWin(playerHand);
+  
+  updateValues();
+
+  // swap out buttons
   gameControls.removeChild(redrawButton);
   gameControls.appendChild(restartButton);
+
+  gameState = STATE_RESULT;
 }
 
 const gameRestart = () => {
+  playerBet = 1; // reset player bet value, but keep credits
+  playerHand.splice(0, 5); // clear out player hand
+  deck.splice(0, 52, ...shuffleCards(makeDeck())); // clear out deck, and replace with reshuffled deck using spread operator
+  cardDisplay.innerHTML = "" // reset card display
+  keepIndex = { // reset the values of keep index
+    0: false,
+    1: false,
+    2: false,
+    3: false,
+    4: false,
+  };
+  suitTally = {}; // reset suit tally
+  rankTally = {}; // reset rank tally
+  
+  // refresh contents on screen
+  cardDisplay.innerHTML = "Click Deal to play again! <br /> You know you want to win more!" 
+  updateValues();
 
+  // swap out buttons
+  gameControls.removeChild(restartButton);
+  gameControls.appendChild(dealButton);
+  // renable bet modifications
+  betPlus.disabled = false;
+
+  gameState = STATE_DEAL;
 }
 
 gameStart();
 
-betPlus.addEventListener('click', () => {
-  betModify("up")
-})
-betMinus.addEventListener('click', () => {
-  betModify("down")
-})
 
+
+
+
+// event listeners for game buttons
+betPlus.addEventListener('click', increaseBet);
+betMinus.addEventListener('click', decreaseBet);
 dealButton.addEventListener('click', gameDeal);
-redrawButton.addEventListener('click', gameRedraw)
-restartButton.addEventListener('click', gameRestart)
+redrawButton.addEventListener('click', gameRedraw);
+restartButton.addEventListener('click', gameRestart);
