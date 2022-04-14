@@ -28,7 +28,7 @@ body {
 
   height: 100%;
   width: 100%;
-  max-height: 1000px;
+  max-height: 800px;
   max-width: 1000px;
 
   padding: 10px;
@@ -51,8 +51,8 @@ body {
   text-align: center;
   font-family: Monoton;
   font-weight: 100;
-  font-size: 2.8rem;
-  line-height: 2.5rem;
+  font-size: 2.6rem;
+  line-height: 2.2rem;
 }
 
 .game-container {
@@ -65,19 +65,26 @@ body {
 
 .winning-hands {
   display: grid;
+  grid-template-columns: 3fr 1fr 3fr 1fr;
+  grid-auto-flow: row;
+  column-gap: 5px;
+  align-items: center;
+  box-sizing: border-box;
 
   background-color: #386641;
-  height: 200px;
+  color: #f2e8cf;
+  height: 150px;
   width: 100%;
 
   border-radius: 15px;
 
+  padding: 20px;
   margin-bottom: 10px;
 }
 
 .game-board {
   display: flex;
-  flex-flow: column wrap;
+  flex-flow: column nowrap;
   justify-content: space-between;
   align-items: center;
 
@@ -95,11 +102,16 @@ body {
   justify-content: center;
   align-items: center;
   align-content: center;
+  box-sizing: border-box;
 
   text-align: center;
 
   height: 100%;
-  width: 100%;
+  min-height: 300px;
+  width: 94%;
+
+  padding: 5%;
+  margin-top: 3%;
 }
 
 .card {
@@ -125,6 +137,22 @@ body {
   padding: 5%;
 }
 
+.message-display {
+  display: flex;
+  align-items: center;
+  background-color: #161a1d;
+  box-sizing: border-box;
+
+  min-height: 20%;
+  width: 94%;
+
+  border-radius: 8px;
+
+  padding: 0px 20px;
+  margin: auto;
+  margin-bottom: 3%;
+}
+
 .controls-container {
   display: flex;
   flex-flow: row nowrap;
@@ -139,13 +167,18 @@ body {
   padding: 10px;
 }
 
+.credit-icon {
+  text-align: center;
+  width: 50px;
+}
+
 .credit-score {
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
 
   height: 100%;
-  width: 150px;
+  width: 50px;
 
   margin-right: 10px;
 }
@@ -199,6 +232,12 @@ body {
 @media only screen and (min-width: 800px) {
   .container {
     padding: 30px;
+    padding-top: 0px;
+  }
+
+  .title {
+    font-size: 5rem;
+    line-height: 2rem;
   }
 
   .game-container {
@@ -206,16 +245,27 @@ body {
   }
 
   .winning-hands {
-    height: 100%;
+    grid-template-columns: 5fr 1fr;
+    grid-auto-flow: row;
+
+    height: 45%;
     width: 50%;
 
     margin-right: 15px;
     margin-bottom: 0px;
   }
 
+  .card-display {
+    padding: 12%;
+  }
+
   .card {
     height: 150px;
     width: 100px;
+  }
+
+  .message-display {
+    min-height: 10%;
   }
 
   .controls-container .wide-button {
