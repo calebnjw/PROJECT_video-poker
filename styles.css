@@ -106,8 +106,8 @@ body {
 
   text-align: center;
 
-  height: 100%;
-  min-height: 300px;
+  height: 70%;
+  min-height: 250px;
   width: 94%;
 
   padding: 5%;
@@ -122,19 +122,24 @@ body {
   box-sizing: border-box;
 
   font-family: "IBM Plex Mono";
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 
   color: #161a1d;
   background-color: #f2e8cf;
-  height: 120px;
-  width: 80px;
+  height: 100px;
+  width: 70px;
 
   border: 2px solid #6a994e;
   border-radius: 0.5rem;
-  box-shadow: 1px 3px 2px #2e5536;
+  box-shadow: 2px 4px 2px #1d3622;
 
   margin: 5px;
   padding: 5%;
+}
+
+.selected {
+  border: 3px solid white;
+  box-shadow: 0 0 5px #eaffba;
 }
 
 .message-display {
@@ -220,11 +225,6 @@ body {
   text-align: center;
 }
 
-.selected {
-  border: 2px solid white;
-  box-shadow: 0 0 10px #a7c957;
-}
-
 .controls-container .wide-button {
   width: 100px;
 }
@@ -260,6 +260,8 @@ body {
   }
 
   .card {
+    font-size: 1.8rem;
+
     height: 150px;
     width: 100px;
   }
