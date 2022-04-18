@@ -1,3 +1,5 @@
+/* eslint-disable max-len */
+
 // X set up game deck and board
 //// X display "draw" button on screen
 // X user adjusts bet amount - / + buttons (min 1, max 5)
@@ -10,8 +12,8 @@
 // X player selects cards to keep
 // X player clicks "redraw" button
 //// X cards that were not selected are swapped out for random cards
-// calculate score of current hand
-//// 10 types of poker hands: 
+// X calculate score of current hand
+//// X 10 types of poker hands: 
 ////// 1. Five of a kind    (CAN'T BE ACHIEVED, no joker in deck)
 ////// 2. Straight flush    (5 same suit + 5 sequential rank)
 ////// 3. Four of a kind    (4 same rank)
@@ -22,7 +24,7 @@
 ////// 8. Two Pair          (2 same rank + 2 same rank)
 ////// 9. One pair          (2 same rank)
 ////// 10. High card        (NOT WORTH SCORING?)
-//// score is multiplied by bet amount
+//// X score is multiplied by bet amount
 ////// 2. Straight flush    (50)
 ////// 3. Four of a kind    (25)
 ////// 4. Full house        (9)
@@ -36,9 +38,9 @@
 
 // global game variables
 // game states (not necessary?)
-let STATE_DEAL = "deal";
-let STATE_DRAW = "draw";
-let STATE_RESULT = "result";
+const STATE_DEAL = "deal";
+const STATE_DRAW = "draw";
+const STATE_RESULT = "result";
 let gameState = STATE_DEAL;
 
 // player start with 100 credits
@@ -48,12 +50,12 @@ let playerBet = 1;
 // player's hand: 5 random cards
 const playerHand = [];
 
-let handScore = {
+const handScore = {
   "Straight Flush": 50,
   "Four of a Kind": 25,
   "Full House": 9,
-  "Flush": 5,
-  "Straight": 4,
+  Flush: 5,
+  Straight: 4,
   "Three of a Kind": 3,
   "Two Pair": 2,
   "Jack or Higher": 1,
@@ -67,10 +69,8 @@ let keepIndex = { // object to keep track of indices of cards to be kept / swapp
   3: false,
   4: false,
 };
-let suitTally = { // object to keep track of number of each suit in hand
-};
-let rankTally = { // object to keep track of number of unique ranks in hand
-};
+let suitTally = {}; // object to keep track of number of each suit in hand
+let rankTally = {}; // object to keep track of number of unique ranks in hand
 
 // HTML page / DOM setup:
 // container to hold page elements:
@@ -81,8 +81,8 @@ const titleDisplay = document.createElement('div');
 titleDisplay.classList.add('title-container');
 // title
 const subtitle = document.createElement('p');
-subtitle.innerText = "Caleb's House of Gambling presents"
-subtitle.classList.add('subtitle')
+subtitle.innerText = "Caleb's House of Gambling presents";
+subtitle.classList.add('subtitle');
 const title = document.createElement('h1');
 title.innerText = "VIDEO POKER";
 title.classList.add('title');
@@ -92,7 +92,7 @@ const gameDisplay = document.createElement('div');
 gameDisplay.classList.add('game-container');
 // display different hands
 const winningHands = document.createElement('div');
-winningHands.classList.add('winning-hands')
+winningHands.classList.add('winning-hands');
 // display game board
 const gameBoard = document.createElement('div');
 gameBoard.classList.add('game-board');
@@ -107,7 +107,7 @@ const controlsDisplay = document.createElement('div');
 controlsDisplay.classList.add('controls-container');
 // credit score
 const creditIcon = document.createElement('i');
-creditIcon.classList.add('credit-icon', 'fa-solid', 'fa-coins')
+creditIcon.classList.add('credit-icon', 'fa-solid', 'fa-coins');
 const creditScore = document.createElement('div');
 creditScore.classList.add('credit-score');
 
@@ -124,7 +124,7 @@ betMinus.disabled = true;
 
 // deal / redraw / restart button container
 const gameControls = document.createElement('div');
-gameControls.classList.add('game-controls')
+gameControls.classList.add('game-controls');
 const dealButton = document.createElement('button');
 dealButton.classList.add('wide-button');
 dealButton.innerText = "Deal";
@@ -169,7 +169,7 @@ const makeDeck = () => {
       suitSymbol = '♣️';
     } else if (currentSuit === 'spades') {
       suitSymbol = '♠️';
-    };
+    }
     
     for (let rankCounter = 2; rankCounter <= 14; rankCounter += 1) {
       let cardName = `${rankCounter}`;
@@ -187,7 +187,7 @@ const makeDeck = () => {
       } else if (cardName === '14') {
         cardName = 'ace';
         cardDisplayName = 'A';
-      };
+      }
       
       const card = {
         suit: currentSuit,
@@ -198,8 +198,8 @@ const makeDeck = () => {
       };
       
       newDeck.push(card);
-    };
-  };
+    }
+  }
   
   return newDeck;
 };
@@ -214,7 +214,7 @@ const shuffleCards = (cards) => {
     const randomCard = cards[randomIndex];
     const currentCard = cards[currentIndex];
     [cards[currentIndex], cards[randomIndex]] = [randomCard, currentCard];
-  };
+  }
   return cards;
 };
 
@@ -222,15 +222,15 @@ const shuffleCards = (cards) => {
 const dealCards = () => {
   for (let i = 0; i < 5; i += 1) {
     playerHand.push(deck.pop());  
-  };
+  }
 };
 
 const redrawCards = () => {
   for (let i = 0; i < playerHand.length; i += 1) {
     if (keepIndex[i] === false) {
       playerHand.splice(i, 1, deck.pop());
-    };
-  };
+    }
+  }
 };
 
 // function to output dealer message
@@ -240,8 +240,8 @@ const dealerMessage = (message) => {
 
 // function to update player credit and bet amounts
 const updateValues = () => {
-  creditScore.innerText = `${playerCredits}`
-  betDisplay.innerText = `${playerBet}`
+  creditScore.innerText = `${playerCredits}`;
+  betDisplay.innerText = `${playerBet}`;
 };
 
 const updateWinningHands = () => {
@@ -250,18 +250,17 @@ const updateWinningHands = () => {
   
   // table to display scores and winning hands
   for (const [key, value] of Object.entries(handScore)) {
-
     // create div elements for the hand name and score
     const handItem = document.createElement('div');
     const scoreItem = document.createElement('div');
 
     // fill in content from the array
-    handItem.innerText = `${key}`
-    scoreItem.innerText = `${value * playerBet}`
+    handItem.innerText = `${key}`;
+    scoreItem.innerText = `${value * playerBet}`;
 
     // add to winning hands box
     winningHands.append(handItem, scoreItem);
-  };
+  }
 };
 
 // function to increase bet size
@@ -276,11 +275,11 @@ const increaseBet = () => {
     betPlus.disabled = true;
   } else if (playerBet >= playerCredits) {
     betPlus.disabled = true;
-    dealerMessage("You maxed out your credts! Click deal to try your luck one more time, then buy more at a low price of $3.99 for 9 credits.")
+    dealerMessage("You maxed out your credts! Click deal to try your luck one more time, then buy more at a low price of $3.99 for 9 credits.");
   } else {
     betMinus.disabled = false;
     betPlus.disabled = false;
-  };
+  }
 };
 
 // function to decrease bet size
@@ -296,14 +295,14 @@ const decreaseBet = () => {
   } else {
     betMinus.disabled = false;
     betPlus.disabled = false;
-  };
+  }
 };
 
 // function to display cards and let them be clickable
 const displayCards = () => {
-  cardDisplay.innerHTML = ''
+  cardDisplay.innerHTML = '';
   playerHand.forEach((element, index) => {
-    const cardElement = document.createElement('div')
+    const cardElement = document.createElement('div');
     cardElement.classList.add('card');
     const topSuit = document.createElement('div');
     topSuit.innerText = `${element.symbol}`;
@@ -316,7 +315,7 @@ const displayCards = () => {
       cardElement.addEventListener('click', () => {
         cardToggle(index, cardElement);
       });
-    };
+    }
     cardDisplay.append(cardElement);
   });
 };
@@ -328,7 +327,7 @@ const cardToggle = (i, element) => {
   } else {
     keepIndex[i] = false;
     element.classList.remove('selected');
-  };
+  }
   console.log("keep index:", keepIndex);
 };
 
@@ -340,7 +339,7 @@ const checkStraight = (hand) => { // check the hand and rank tally
   let rankCounter = 0;
   for (const cardRank in rankTally) {
     rankCounter += 1;
-  };
+  }
   console.log("unique ranks", rankCounter);
 
   if (rankCounter === 5) {
@@ -348,42 +347,42 @@ const checkStraight = (hand) => { // check the hand and rank tally
     // need to check if other cards are 2-4, if yes, return true also. 
     if ((sortedHand[4].rank === 14 
     && sortedHand[0].rank === 2) 
-    && (sortedHand[3].rank - sortedHand[0].rank) === 3){
-      console.log("Straight: true")
+    && (sortedHand[3].rank - sortedHand[0].rank) === 3) {
+      console.log("Straight: true");
       return true;
-    } else if ((sortedHand[4].rank - sortedHand[0].rank) === 4) {
-      console.log("Straight: true")
+    } if ((sortedHand[4].rank - sortedHand[0].rank) === 4) {
+      console.log("Straight: true");
       return true;
-    };
-  };
+    }
+  }
 };
 
 const checkFlush = (tally) => { // check the suit tally
   for (const [key, value] of Object.entries(tally)) {
-    console.log(key, value)
+    console.log(key, value);
     if (value === 5) {
-      console.log("Flush: true")
+      console.log("Flush: true");
       return true; 
-    };
-  };
+    }
+  }
 };
 
 const checkFourSame = (tally) => { // check the suit tally
   for (const [key, value] of Object.entries(tally)) {
     if (value === 4) {
-      console.log("Four of a Kind: true")
+      console.log("Four of a Kind: true");
       return true;
-    };
-  };
+    }
+  }
 };
 
 const checkThreeSame = (tally) => { // check the suit tally
   for (const [key, value] of Object.entries(tally)) {
     if (value === 3) {
-      console.log("Three of a Kind: true")
+      console.log("Three of a Kind: true");
       return true;
-    };
-  };
+    }
+  }
 };
 
 const checkPairCount = (tally) => { // check the rank tally
@@ -391,19 +390,19 @@ const checkPairCount = (tally) => { // check the rank tally
   for (const [key, value] of Object.entries(tally)) {
     if (value === 2) {
       pairCounter += 1;
-    };
-  };
-  console.log("Number of Pairs:", pairCounter)
+    }
+  }
+  console.log("Number of Pairs:", pairCounter);
   return pairCounter;
 };
 
 const checkJackHigher = (tally) => { // check the rank tally
   for (const [key, value] of Object.entries(tally)) {
     if (key > 10 && value === 2) {
-      console.log("Jack or Higher: true")
+      console.log("Jack or Higher: true");
       return true;
-    };
-  };
+    }
+  }
 };
 
 // function to check for winning hands
@@ -417,53 +416,53 @@ const checkWin = (hand) => {
       rankTally[element.rank] += 1;
     } else {
       rankTally[element.rank] = 1;
-    };
+    }
     
     if (element.suit in suitTally) {
       suitTally[element.suit] += 1;
     } else {
       suitTally[element.suit] = 1;
-    };
+    }
     
-    console.log("rank tally", rankTally);
     console.log("suit tally", suitTally);
+    console.log("rank tally", rankTally);
   });
 
   let output;
-  let straightState = checkStraight(hand);
-  let flushState = checkFlush(suitTally);
-  let fourState = checkFourSame(rankTally);
-  let threeState = checkThreeSame(rankTally);
-  let pairCount = checkPairCount(rankTally);
-  let jackState = checkJackHigher(rankTally);
+  const straightState = checkStraight(hand);
+  const flushState = checkFlush(suitTally);
+  const fourState = checkFourSame(rankTally);
+  const threeState = checkThreeSame(rankTally);
+  const pairCount = checkPairCount(rankTally);
+  const jackState = checkJackHigher(rankTally);
 
   if (straightState && flushState) { // checking for straight flush: 5 sequential cards, 5 same suit 
-    output = `Straight flush. +${handScore["Straight Flush"] * playerBet} to your credits!` 
-    playerCredits += handScore["Straight Flush"] * playerBet
+    output = `Straight flush. +${handScore["Straight Flush"] * playerBet} to your credits!`;
+    playerCredits += handScore["Straight Flush"] * playerBet;
   } else if (fourState) { // checking for four of a kind: 4 same suit
-    output = `Four of a Kind. +${handScore["Four of a Kind"] * playerBet} to your credits!` 
-    playerCredits += handScore["Four of a Kind"] * playerBet
+    output = `Four of a Kind. +${handScore["Four of a Kind"] * playerBet} to your credits!`;
+    playerCredits += handScore["Four of a Kind"] * playerBet;
   } else if (threeState && pairCount === 1) { // checking for full house: triplet + pair
-    output = `Full House. +${handScore["Full House"] * playerBet} to your credits!` 
-    playerCredits += handScore["Full House"] * playerBet
+    output = `Full House. +${handScore["Full House"] * playerBet} to your credits!`;
+    playerCredits += handScore["Full House"] * playerBet;
   } else if (flushState) { // checking for Flush            
-    output = `Flush. +${handScore["Flush"] * playerBet} to your credits!` 
-    playerCredits += handScore["Flush"] * playerBet
+    output = `Flush. +${handScore.Flush * playerBet} to your credits!`;
+    playerCredits += handScore.Flush * playerBet;
   } else if (straightState) { // checking for Straight
-    output = `Straight. +${handScore["Straight"] * playerBet} to your credits!` 
-    playerCredits += handScore["Straight"] * playerBet
+    output = `Straight. +${handScore.Straight * playerBet} to your credits!`;
+    playerCredits += handScore.Straight * playerBet;
   } else if (threeState) { // checking for Three of a Kind
-    output = `Three of a Kind. +${handScore["Three of a Kind"] * playerBet} to your credits!` 
-    playerCredits += handScore["Three of a Kind"] * playerBet
+    output = `Three of a Kind. +${handScore["Three of a Kind"] * playerBet} to your credits!`;
+    playerCredits += handScore["Three of a Kind"] * playerBet;
   } else if (pairCount === 2) { // checking for Two Pair
-    output = `Two Pair. +${handScore["Two Pair"] * playerBet} to your credits!` 
-    playerCredits += handScore["Two Pair"] * playerBet
+    output = `Two Pair. +${handScore["Two Pair"] * playerBet} to your credits!`;
+    playerCredits += handScore["Two Pair"] * playerBet;
   } else if (pairCount === 1 && jackState) { // checking for Jack or Higher
-    output = `Jack or Higher. +${handScore["Jack or Higher"] * playerBet} to your credits!` 
-    playerCredits += handScore["Jack or Higher"] * playerBet
+    output = `Jack or Higher. +${handScore["Jack or Higher"] * playerBet} to your credits!`;
+    playerCredits += handScore["Jack or Higher"] * playerBet;
   } else {
-    output = `Nice try! Let's play again.`
-  };
+    output = `Nice try! Press restart to play again.`;
+  }
 
   // hand[0] - hand[1] === hand[1] - hand[2] === hand[2] - hand[3], etc. 
   //// check suits, if any = 5      (STRAIGHT FLUSH)
@@ -497,24 +496,24 @@ const deck = shuffleCards(makeDeck());
 /////////////////////////////////////////////////////////
 // function to run when game starts: 
 const gameStart = () => {
-  dealerMessage("Are you ready to play? Click Deal to begin!");
+  dealerMessage("Are you ready to play? Adjust your bet amount, then click Deal to begin!");
   
   updateValues();
   updateWinningHands();
   
   gameControls.append(dealButton);
-}
+};
 
 // function to run when player clicks deal: 
 const gameDeal = () => {
   dealCards();
-  console.log("current player hand:", playerHand)
+  console.log("current player hand:", playerHand);
   displayCards();
   
   playerCredits -= playerBet;
   updateValues();
 
-  dealerMessage("Here are your cards. Select only those you want to keep!")
+  dealerMessage("Here are your cards. Select only those you want to keep!");
 
   // swap out buttons
   gameControls.removeChild(dealButton);
@@ -530,11 +529,11 @@ const gameDeal = () => {
 const gameRedraw = () => {
   // then swap draw 5 - playerKeep.length number of cards
   redrawCards();
-  console.log("current player hand:", playerHand)
+  console.log("current player hand:", playerHand);
   displayCards();
   
   // calculate hand and winnings, then update values
-  let outputMessage = checkWin(playerHand);
+  const outputMessage = checkWin(playerHand);
   dealerMessage(outputMessage);
   
   // swap out buttons
@@ -550,7 +549,7 @@ const gameRestart = () => {
   playerBet = 1; // reset player bet value, but keep credits
   playerHand.splice(0, 5); // clear out player hand
   deck.splice(0, 52, ...shuffleCards(makeDeck())); // clear out deck, and replace with reshuffled deck using spread operator
-  cardDisplay.innerHTML = "" // reset card display
+  cardDisplay.innerHTML = ""; // reset card display
   keepIndex = { // reset the values of keep index
     0: false,
     1: false,
@@ -569,12 +568,12 @@ const gameRestart = () => {
 
   // refresh contents on screen
   if (playerCredits === 0) {
-    dealerMessage("You've run out of credits. Buy more at a low price of $3.99 for 9 credits.")
+    dealerMessage("You've run out of credits. Buy more at a low price of $3.99 for 9 credits.");
     dealButton.disabled = true;
     betPlus.disabled = true;
   } else {
     dealerMessage("Click Deal to play again! You know you want to win!"); 
-  };
+  }
 
   updateValues();
   updateWinningHands();
@@ -589,10 +588,6 @@ gameStart();
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////
-
-
-
-
 
 // event listeners for game buttons
 betPlus.addEventListener('click', increaseBet);
