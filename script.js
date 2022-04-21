@@ -336,10 +336,7 @@ const checkStraight = (hand) => { // check the hand and rank tally
   // sort the hand
   const sortedHand = hand.sort((a, b) => a.rank - b.rank); 
 
-  let rankCounter = 0;
-  for (const cardRank in rankTally) {
-    rankCounter += 1;
-  }
+  const rankCounter = Object.keys(rankTally).length;
   console.log("unique ranks", rankCounter);
 
   if (rankCounter === 5) {
@@ -355,6 +352,7 @@ const checkStraight = (hand) => { // check the hand and rank tally
       return true;
     }
   }
+  return false;
 };
 
 const checkFlush = (tally) => { // check the suit tally
@@ -365,29 +363,32 @@ const checkFlush = (tally) => { // check the suit tally
       return true; 
     }
   }
+  return false;
 };
 
 const checkFourSame = (tally) => { // check the suit tally
-  for (const [key, value] of Object.entries(tally)) {
+  for (const [_key, value] of Object.entries(tally)) {
     if (value === 4) {
       console.log("Four of a Kind: true");
       return true;
     }
   }
+  return false;
 };
 
 const checkThreeSame = (tally) => { // check the suit tally
-  for (const [key, value] of Object.entries(tally)) {
+  for (const [_key, value] of Object.entries(tally)) {
     if (value === 3) {
       console.log("Three of a Kind: true");
       return true;
     }
   }
+  return false;
 };
 
 const checkPairCount = (tally) => { // check the rank tally
   let pairCounter = 0;
-  for (const [key, value] of Object.entries(tally)) {
+  for (const [_key, value] of Object.entries(tally)) {
     if (value === 2) {
       pairCounter += 1;
     }
@@ -403,6 +404,7 @@ const checkJackHigher = (tally) => { // check the rank tally
       return true;
     }
   }
+  return false;
 };
 
 // function to check for winning hands
