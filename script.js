@@ -138,13 +138,13 @@ restartButton.innerText = "Restart";
 // putting title into title container
 titleDisplay.append(subtitle, title);
 // putting controls into container
-betControls.append(betMinus, betDisplay, betPlus); 
+betControls.append(betMinus, betDisplay, betPlus);
 // put score and controls into container
-controlsDisplay.append(creditIcon, creditScore, betControls, gameControls); 
+controlsDisplay.append(creditIcon, creditScore, betControls, gameControls);
 // put game info, card display and controls into game board
-gameBoard.append(cardDisplay, messageDisplay); 
+gameBoard.append(cardDisplay, messageDisplay);
 // put scoring table and game board into game display area
-gameDisplay.append(winningHands, gameBoard); 
+gameDisplay.append(winningHands, gameBoard);
 // put title and game display area into page container
 pageContainer.append(titleDisplay, gameDisplay, controlsDisplay);
 // put page container into body
@@ -155,12 +155,12 @@ document.body.append(pageContainer);
 const makeDeck = () => {
   const newDeck = [];
   const suits = ['hearts', 'diamonds', 'clubs', 'spades'];
-  
+
   for (let suitIndex = 0; suitIndex < suits.length; suitIndex += 1) {
     const currentSuit = suits[suitIndex];
-    
+
     let suitSymbol;
-    
+
     if (currentSuit === 'hearts') {
       suitSymbol = '♥️';
     } else if (currentSuit === 'diamonds') {
@@ -170,11 +170,11 @@ const makeDeck = () => {
     } else if (currentSuit === 'spades') {
       suitSymbol = '♠️';
     }
-    
+
     for (let rankCounter = 2; rankCounter <= 14; rankCounter += 1) {
       let cardName = `${rankCounter}`;
       let cardDisplayName = `${rankCounter}`;
-      
+
       if (cardName === '11') {
         cardName = 'jack';
         cardDisplayName = 'J';
@@ -188,7 +188,7 @@ const makeDeck = () => {
         cardName = 'ace';
         cardDisplayName = 'A';
       }
-      
+
       const card = {
         suit: currentSuit,
         symbol: suitSymbol,
@@ -196,11 +196,11 @@ const makeDeck = () => {
         displayName: cardDisplayName,
         rank: rankCounter,
       };
-      
+
       newDeck.push(card);
     }
   }
-  
+
   return newDeck;
 };
 
@@ -221,7 +221,7 @@ const shuffleCards = (cards) => {
 // function to draw given number of cards to given hand
 const dealCards = () => {
   for (let i = 0; i < 5; i += 1) {
-    playerHand.push(deck.pop());  
+    playerHand.push(deck.pop());
   }
 };
 
@@ -247,7 +247,7 @@ const updateValues = () => {
 const updateWinningHands = () => {
   // empty out the winning hands box
   winningHands.innerHTML = "";
-  
+
   // table to display scores and winning hands
   for (const [key, value] of Object.entries(handScore)) {
     // create div elements for the hand name and score
@@ -268,7 +268,7 @@ const increaseBet = () => {
   playerBet += 1;
   updateValues();
   updateWinningHands();
-  
+
   if (playerBet === 1) {
     betMinus.disabled = true;
   } else if (playerBet === 5) {
@@ -287,7 +287,7 @@ const decreaseBet = () => {
   playerBet -= 1;
   updateValues();
   updateWinningHands();
-  
+
   if (playerBet === 1) {
     betMinus.disabled = true;
   } else if (playerBet === 5) {
@@ -334,7 +334,7 @@ const cardToggle = (i, element) => {
 // checkWin helper functions
 const checkStraight = (hand) => { // check the hand and rank tally
   // sort the hand
-  const sortedHand = hand.sort((a, b) => a.rank - b.rank); 
+  const sortedHand = hand.sort((a, b) => a.rank - b.rank);
 
   const rankCounter = Object.keys(rankTally).length;
   console.log("unique ranks", rankCounter);
@@ -342,9 +342,9 @@ const checkStraight = (hand) => { // check the hand and rank tally
   if (rankCounter === 5) {
     // checking for ace conditions (ace can be either 1 or or after king)
     // need to check if other cards are 2-4, if yes, return true also. 
-    if ((sortedHand[4].rank === 14 
-    && sortedHand[0].rank === 2) 
-    && (sortedHand[3].rank - sortedHand[0].rank) === 3) {
+    if ((sortedHand[4].rank === 14
+      && sortedHand[0].rank === 2)
+      && (sortedHand[3].rank - sortedHand[0].rank) === 3) {
       console.log("Straight: true");
       return true;
     } if ((sortedHand[4].rank - sortedHand[0].rank) === 4) {
@@ -360,7 +360,7 @@ const checkFlush = (tally) => { // check the suit tally
     console.log(key, value);
     if (value === 5) {
       console.log("Flush: true");
-      return true; 
+      return true;
     }
   }
   return false;
@@ -419,13 +419,13 @@ const checkWin = (hand) => {
     } else {
       rankTally[element.rank] = 1;
     }
-    
+
     if (element.suit in suitTally) {
       suitTally[element.suit] += 1;
     } else {
       suitTally[element.suit] = 1;
     }
-    
+
     console.log("suit tally", suitTally);
     console.log("rank tally", rankTally);
   });
@@ -476,7 +476,7 @@ const checkWin = (hand) => {
   //// check if other = 3           (FULL HOUSE)
   //// check if other = 2           (TWO PAIR) 
   //// check if rank > 10           (Jack or Higher, JACKS OR HIGHER)
-  
+
   // check suits, if any = 5        (FLUSH)
 
   // check ranks, if any = 3        (THREE OF A KIND)
@@ -499,10 +499,10 @@ const deck = shuffleCards(makeDeck());
 // function to run when game starts: 
 const gameStart = () => {
   dealerMessage("Are you ready to play? Adjust your bet amount, then click Deal to begin!");
-  
+
   updateValues();
   updateWinningHands();
-  
+
   gameControls.append(dealButton);
 };
 
@@ -511,7 +511,7 @@ const gameDeal = () => {
   dealCards();
   console.log("current player hand:", playerHand);
   displayCards();
-  
+
   playerCredits -= playerBet;
   updateValues();
 
@@ -533,15 +533,15 @@ const gameRedraw = () => {
   redrawCards();
   console.log("current player hand:", playerHand);
   displayCards();
-  
+
   // calculate hand and winnings, then update values
   const outputMessage = checkWin(playerHand);
   dealerMessage(outputMessage);
-  
+
   // swap out buttons
   gameControls.removeChild(redrawButton);
   gameControls.appendChild(restartButton);
-  
+
   updateValues();
 
   gameState = STATE_RESULT;
@@ -561,7 +561,7 @@ const gameRestart = () => {
   };
   suitTally = {}; // reset suit tally
   rankTally = {}; // reset rank tally
-  
+
   // swap out buttons
   gameControls.removeChild(restartButton);
   gameControls.appendChild(dealButton);
@@ -574,7 +574,7 @@ const gameRestart = () => {
     dealButton.disabled = true;
     betPlus.disabled = true;
   } else {
-    dealerMessage("Click Deal to play again! You know you want to win!"); 
+    dealerMessage("Click Deal to play again! You know you want to win!");
   }
 
   updateValues();
